@@ -4,6 +4,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get -y install --no-install-recommends \
 	libreoffice-common=* \
+	libreoffice-core=* \
+	libreoffice-writer=* \
 	ure \
 	libreoffice-java-common \
 	openjdk-8-jre \
@@ -24,8 +26,6 @@ RUN apt-get update && apt-get -y install --no-install-recommends \
 
 EXPOSE 2002
 
-RUN adduser --system --disabled-password --gecos "" --shell=/bin/bash libreoffice
-
 RUN echo $'[Bootstrap] \n\
 HideEula=1 \n\
 Logo=0 \n\
@@ -37,10 +37,9 @@ ProgressSize=409,8 \n\
 ProgressTextBaseline=170 \n\
 ProgressTextColor=255,255,255' > /etc/libreoffice/sofficerc
 
-RUN echo $"#!/bin/bash \n\
+RUN echo "#!/bin/sh \n\
 exec /usr/bin/libreoffice --nologo --norestore --invisible --headless --accept='socket,host=0,port=2002,tcpNoDelay=1;urp;'" > /usr/local/bin/startlo.sh && chmod a+x /usr/local/bin/startlo.sh
 
-RUN mkdir /tmp/libreoffice && chmod a+rxw /tmp/libreoffice
 VOLUME ["/tmp/libreoffice"]
 
 ENTRYPOINT ["startlo.sh"]
