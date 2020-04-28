@@ -40,6 +40,8 @@ ProgressTextColor=255,255,255' > /etc/libreoffice/sofficerc
 RUN echo "#!/bin/sh \n\
 exec /usr/bin/libreoffice --nologo --norestore --invisible --headless --accept='socket,host=0,port=2002,tcpNoDelay=1;urp;'" > /usr/local/bin/startlo.sh && chmod a+x /usr/local/bin/startlo.sh
 
+RUN mkdir /tmp/libreoffice && chmod a+rxw /tmp/libreoffice
+
 VOLUME ["/tmp/libreoffice"]
 
 ENTRYPOINT ["startlo.sh"]
